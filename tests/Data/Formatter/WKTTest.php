@@ -38,7 +38,6 @@ use CrEOF\Geo\Obj\Data\DataFactory;
  */
 class WKTTest extends \PHPUnit_Framework_TestCase
 {
-
     /**
      * @dataProvider wktTestData
      */
