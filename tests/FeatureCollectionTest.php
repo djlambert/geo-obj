@@ -94,7 +94,7 @@ class FeatureCollectionTest extends \PHPUnit_Framework_TestCase
     {
         return [
             'testFeatureCollectionPoints' => [
-                'value'      => '{"type":"FeatureCollection","features":[{"type":"Feature","geometry":{"type":"Point","coordinates":[0,0], "properties":{"name":"null spot"}}},{"type":"Feature","geometry":{"type":"Point","coordinates":[1,1], "properties":{"name":"some spot"}}}]}',
+                'value'      => '{"type":"FeatureCollection","features":[{"type":"Feature","geometry":{"type":"Point","coordinates":[0,0]},"properties":{"name":"null spot"}},{"type":"Feature","geometry":{"type":"Point","coordinates":[1,1]},"properties":{"name": "some spot"}}]}',
                 'validators' => null,
                 'expected'   => [
                     'features' => [
@@ -102,20 +102,20 @@ class FeatureCollectionTest extends \PHPUnit_Framework_TestCase
                             'type'  => 'Feature',
                             'geometry' => [
                                 'type'        => 'Point',
-                                'coordinates' => [0, 0],
-                                'properties'  => [
-                                    'name' => 'null spot'
-                                ]
+                                'coordinates' => [0, 0]
+                            ],
+                            'properties'  => [
+                                'name' => 'null spot'
                             ]
                         ],
                         [
                             'type'  => 'Feature',
                             'geometry' => [
                                 'type'        => 'Point',
-                                'coordinates' => [1, 1],
-                                'properties'  => [
-                                    'name' => 'some spot'
-                                ]
+                                'coordinates' => [1, 1]
+                            ],
+                            'properties'  => [
+                                'name' => 'some spot'
                             ]
                         ]
                     ]
