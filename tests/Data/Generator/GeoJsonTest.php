@@ -170,6 +170,8 @@ class GeoJsonTest extends \PHPUnit_Framework_TestCase
                 'expected' => [
                     'type'       => 'Point',
                     'value'      => [0, 0],
+                    'srid'       => null,
+                    'dimension'  => null,
                     'properties' => []
                 ]
             ],
@@ -178,6 +180,8 @@ class GeoJsonTest extends \PHPUnit_Framework_TestCase
                 'expected' => [
                     'type'       => 'LineString',
                     'value'      => [[0, 0], [1, 1], [2, 2]],
+                    'srid'       => null,
+                    'dimension'  => null,
                     'properties' => []
                 ]
             ],
@@ -186,6 +190,8 @@ class GeoJsonTest extends \PHPUnit_Framework_TestCase
                 'expected' => [
                     'type'       => 'Polygon',
                     'value'      => [[0, 0], [1, 1], [2, 2],[0, 0]],
+                    'srid'       => null,
+                    'dimension'  => null,
                     'properties' => []
                 ]
             ],
@@ -194,6 +200,8 @@ class GeoJsonTest extends \PHPUnit_Framework_TestCase
                 'expected' => [
                     'type'       => 'MultiPoint',
                     'value'      => [[0, 0], [1, 1], [2, 2]],
+                    'srid'       => null,
+                    'dimension'  => null,
                     'properties' => []
                 ]
             ],
@@ -205,6 +213,8 @@ class GeoJsonTest extends \PHPUnit_Framework_TestCase
                         [[0, 0], [1, 1], [2, 2]],
                         [[4, 4], [5, 5], [6, 6]]
                     ],
+                    'srid'       => null,
+                    'dimension'  => null,
                     'properties' => []
                 ]
             ],
@@ -216,6 +226,8 @@ class GeoJsonTest extends \PHPUnit_Framework_TestCase
                         [[0, 0], [1, 1], [2, 2], [0, 0]],
                         [[4, 4], [5, 5], [6, 6], [4, 4]]
                     ],
+                    'srid'       => null,
+                    'dimension'  => null,
                     'properties' => []
                 ]
             ],
@@ -227,6 +239,8 @@ class GeoJsonTest extends \PHPUnit_Framework_TestCase
                         'type'       => 'Point',
                         'value'      => [0, 0]
                     ],
+                    'srid'       => null,
+                    'dimension'  => null,
                     'properties' => [
                         'name' => 'null spot'
                     ]
@@ -258,6 +272,8 @@ class GeoJsonTest extends \PHPUnit_Framework_TestCase
                             ]
                         ]
                     ],
+                    'srid'       => null,
+                    'dimension'  => null,
                     'properties' => []
                 ]
             ],

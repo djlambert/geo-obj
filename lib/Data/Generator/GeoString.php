@@ -63,11 +63,11 @@ class GeoString implements GeneratorInterface
         }
 
         return [
-            'value'      => self::$parser->parse($value),
             'type'       => 'point',
+            'value'      => self::$parser->parse($value),
             'srid'       => null,
             'dimension'  => null,
-            'properties' => null
+            'properties' => []
         ];
     }
 }
