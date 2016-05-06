@@ -30,6 +30,8 @@ use CrEOF\Geo\Obj\Data\Formatter\WKB;
  *
  * @author  Derek J. Lambert <dlambert@dereklambert.com>
  * @license http://dlambert.mit-license.org MIT
+ *
+ * @covers \CrEOF\Geo\Obj\Data\Formatter\WKB
  */
 class WKBTest extends \PHPUnit_Framework_TestCase
 {
@@ -87,6 +89,29 @@ class WKBTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @param       $value
+     * @param array $arguments
+     * @param       $expected
+     *
+     * @dataProvider badTestData
+     */
+    public function testBadData($value, array $arguments, $expected)
+    {
+        $reflect   = new \ReflectionClass('CrEOF\Geo\Obj\Data\Formatter\WKB');
+        /** @var WKB $formatter */
+        $formatter = $reflect->newInstanceArgs($arguments);
+
+        if (version_compare(\PHPUnit_Runner_Version::id(), '5.0', '>=')) {
+            $this->expectException($expected['exception']);
+            $this->expectExceptionMessage($expected['message']);
+        } else {
+            $this->setExpectedException($expected['exception'], $expected['message']);
+        }
+
+        $formatter->format($value);
+    }
+
+    /**
      * @return array[]
      */
     public function goodTestData()
@@ -111,6 +136,16 @@ class WKBTest extends \PHPUnit_Framework_TestCase
                 ],
                 'arguments' => [WKB::WKB_XDR, WKB::WKB_FLAG_Z],
                 'expected'  => '0080000001000000000000000000000000000000000000000000000000'
+            ],
+            'testPointZXDRWithSRID' => [
+                'value'     => [
+                    'type'      => 'POINT',
+                    'value'     => [1, 2, 3],
+                    'srid'      => 4326,
+                    'dimension' => 'Z'
+                ],
+                'arguments' => [WKB::WKB_XDR, WKB::WKB_FLAG_Z | WKB::WKB_FLAG_SRID],
+                'expected'  => '00A0000001000010E63FF000000000000040000000000000004008000000000000'
             ],
             'testLineStringDefaultConstructor' => [
                 'value'     => [
@@ -181,7 +216,42 @@ class WKBTest extends \PHPUnit_Framework_TestCase
                 ],
                 'arguments' => [],
                 'expected'  => '0000000006000000020000000003000000020000000500000000000000000000000000000000402400000000000000000000000000004024000000000000402400000000000000000000000000004024000000000000000000000000000000000000000000000000000540140000000000004014000000000000401C0000000000004014000000000000401C000000000000401C0000000000004014000000000000401C00000000000040140000000000004014000000000000000000000300000001000000053FF00000000000003FF000000000000040080000000000003FF0000000000000400800000000000040080000000000003FF000000000000040080000000000003FF00000000000003FF0000000000000'
+            ]
+        ];
+    }
+
+    /**
+     * @return array[]
+     */
+    public function badTestData()
+    {
+        return [
+            'testBadXDRNoZFlag' => [
+                'value'      => [
+                    'type'      => 'POINT',
+                    'value'     => [1, 2, 3],
+                    'srid'      => 4326,
+                    'dimension' => 'Z'
+                ],
+                'arguments' => [WKB::WKB_XDR, WKB::WKB_FLAG_SRID],
+                'expected'  => [
+                    'exception' => 'CrEOF\Geo\Obj\Exception\UnexpectedValueException',
+                    'message'   => ''
+                ]
             ],
+            'testBadXDRNoSRIDFlag' => [
+                'value'      => [
+                    'type'      => 'POINT',
+                    'value'     => [1, 2, 3],
+                    'srid'      => 4326,
+                    'dimension' => 'Z'
+                ],
+                'arguments' => [WKB::WKB_XDR, WKB::WKB_FLAG_Z],
+                'expected'  => [
+                    'exception' => 'CrEOF\Geo\Obj\Exception\UnexpectedValueException',
+                    'message'   => ''
+                ]
+            ]
         ];
     }
 }
