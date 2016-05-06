@@ -82,7 +82,7 @@ class GeoJson implements GeneratorInterface
         return [
             'type'       => Object::getProperTypeName($data['type']),
             'value'      => 'geometry' === $key ? $this->getValueFromGeometry($data[$key]) : $data[$key],
-            'properties' => array_key_exists('properties', $data) ? $data['properties'] : null
+            'properties' => array_key_exists('properties', $data) ? $data['properties'] : []
         ];
     }
 
