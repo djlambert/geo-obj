@@ -107,8 +107,6 @@ class GeoJson implements GeneratorInterface
         $error = json_last_error();
 
         switch ($error) {
-            case JSON_ERROR_NONE:
-                return 'No errors';
             case JSON_ERROR_DEPTH:
                 return 'Maximum stack depth exceeded';
             case JSON_ERROR_STATE_MISMATCH:
@@ -119,17 +117,6 @@ class GeoJson implements GeneratorInterface
                 return 'Syntax error, malformed JSON';
             case JSON_ERROR_UTF8:
                 return 'Malformed UTF-8 characters, possibly incorrectly encoded';
-        }
-
-        if (version_compare(PHP_VERSION, '5.5.0-dev', '>=')) {
-            switch ($error) {
-                case JSON_ERROR_RECURSION:
-                    return 'Recursive references found';
-                case JSON_ERROR_INF_OR_NAN:
-                    return 'Value includes Inf or NaN';
-                case JSON_ERROR_UNSUPPORTED_TYPE:
-                    return 'Unsupported type';
-            }
         }
 
         return 'Unknown error';
