@@ -84,7 +84,7 @@ class WKB implements FormatterInterface
     private $value;
 
     /**
-     * @var array[]
+     * @var array
      */
     private $data;
 
@@ -134,11 +134,6 @@ class WKB implements FormatterInterface
         $flags       = $this->getFlags();
 
         $this->byteOrder();
-
-        if (($flags & self::WKB_FLAG_SRID) === self::WKB_FLAG_SRID) {
-            $this->appendLong($this->data['srid']);
-        }
-
         $this->$typeName($this->data['value'], $flags);
 
         return $this->value;
@@ -155,8 +150,7 @@ class WKB implements FormatterInterface
      */
     private function point(array $point, $flags)
     {
-        $this->appendLong(self::WKB_TYPE_POINT | $flags);
-
+        $this->appendType(self::WKB_TYPE_POINT | $flags);
         $this->appendFloats($point);
     }
 
@@ -166,7 +160,7 @@ class WKB implements FormatterInterface
      */
     private function lineString(array $points, $flags)
     {
-        $this->appendLong(self::WKB_TYPE_LINESTRING | $flags);
+        $this->appendType(self::WKB_TYPE_LINESTRING | $flags);
         $this->appendCount($points);
 
         foreach ($points as $point) {
@@ -180,7 +174,7 @@ class WKB implements FormatterInterface
      */
     private function polygon(array $rings, $flags)
     {
-        $this->appendLong(self::WKB_TYPE_POLYGON | $flags);
+        $this->appendType(self::WKB_TYPE_POLYGON | $flags);
         $this->appendCount($rings);
 
         foreach ($rings as $ring) {
@@ -198,7 +192,7 @@ class WKB implements FormatterInterface
      */
     private function multiPoint(array $points, $flags)
     {
-        $this->appendLong(self::WKB_TYPE_MULTIPOINT | $flags);
+        $this->appendType(self::WKB_TYPE_MULTIPOINT | $flags);
         $this->appendCount($points);
 
         foreach ($points as $point) {
@@ -213,7 +207,7 @@ class WKB implements FormatterInterface
      */
     private function multiLineString(array $lineStrings, $flags)
     {
-        $this->appendLong(self::WKB_TYPE_MULTILINESTRING | $flags);
+        $this->appendType(self::WKB_TYPE_MULTILINESTRING | $flags);
         $this->appendCount($lineStrings);
 
         foreach ($lineStrings as $lineString) {
@@ -228,7 +222,7 @@ class WKB implements FormatterInterface
      */
     private function multiPolygon(array $polygons, $flags)
     {
-        $this->appendLong(self::WKB_TYPE_MULTIPOLYGON | $flags);
+        $this->appendType(self::WKB_TYPE_MULTIPOLYGON | $flags);
         $this->appendCount($polygons);
 
         foreach ($polygons as $polygon) {
@@ -254,9 +248,6 @@ class WKB implements FormatterInterface
 
         if (($flags & $this->flags) !== $flags) {
             throw new UnexpectedValueException(); //TODO mismatchAction?
-//            if (self::WKB_MISMATCH_DROP === $this->mismatchAction && size($this->data['dimension'] > size($expected))) {
-//            }
-
         }
 
         return $flags;
@@ -288,6 +279,18 @@ class WKB implements FormatterInterface
         self::$machineByteOrder = unpack('S', "\x01\x00")[1] === 1 ? self::WKB_NDR : self::WKB_XDR;
 
         return self::$machineByteOrder;
+    }
+
+    /**
+     * @param int $type
+     */
+    private function appendType($type)
+    {
+        $this->appendLong($type);
+
+        if (($type & self::WKB_FLAG_SRID) === self::WKB_FLAG_SRID) {
+            $this->appendLong($this->data['srid']);
+        }
     }
 
     /**
