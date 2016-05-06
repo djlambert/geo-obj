@@ -36,8 +36,8 @@ class GeoJsonTest extends \PHPUnit_Framework_TestCase
     /**
      * @param mixed $value
      *
-     * @covers            \CrEOF\Geo\Obj\Data\Generator\GeoJson::generate
-     * @dataProvider      unsupportedFormatData
+     * @covers       \CrEOF\Geo\Obj\Data\Generator\GeoJson::generate
+     * @dataProvider unsupportedFormatData
      */
     public function testUnsupportedFormat($value, $exceptionMessage)
     {
@@ -56,9 +56,9 @@ class GeoJsonTest extends \PHPUnit_Framework_TestCase
     /**
      * @param mixed $value
      *
-     * @covers            \CrEOF\Geo\Obj\Data\Generator\GeoJson::generate
-     * @covers            \CrEOF\Geo\Obj\Data\Generator\GeoJson::getJsonError
-     * @dataProvider      badJsonData
+     * @covers       \CrEOF\Geo\Obj\Data\Generator\GeoJson::generate
+     * @covers       \CrEOF\Geo\Obj\Data\Generator\GeoJson::getJsonError
+     * @dataProvider badJsonData
      */
     public function testBadJson($value, $exceptionMessage)
     {
