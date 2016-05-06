@@ -119,6 +119,8 @@ class GeoJson implements GeneratorInterface
                 return 'Malformed UTF-8 characters, possibly incorrectly encoded';
         }
 
+        // @codeCoverageIgnoreStart
         return 'Unknown error';
+        // @codeCoverageIgnoreEnd
     }
 }
