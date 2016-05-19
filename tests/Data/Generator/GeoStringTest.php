@@ -43,7 +43,7 @@ class GeoStringTest extends \PHPUnit_Framework_TestCase
     {
         if (version_compare(\PHPUnit_Runner_Version::id(), '5.0', '>=')) {
             $this->expectException('CrEOF\Geo\Obj\Exception\UnsupportedFormatException');
-            $this->expectExceptionMessage($exceptionMessage);
+            null !== $exceptionMessage && $this->expectExceptionMessage($exceptionMessage);
         } else {
             $this->setExpectedException('CrEOF\Geo\Obj\Exception\UnsupportedFormatException', $exceptionMessage);
         }
