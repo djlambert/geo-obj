@@ -57,6 +57,7 @@ class SimpleArray implements GeneratorInterface
         ];
 
         $data['dimension'] = array_key_exists('dimension', $value) ? $this->getDimension($value['dimension']) : $this->getDimensionFromValue($data['value']);
+        $data['properties'] = array_key_exists('properties', $value) ? $value['properties'] : [];
 
         return $data;
     }
