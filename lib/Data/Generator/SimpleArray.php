@@ -109,6 +109,10 @@ class SimpleArray implements GeneratorInterface
         preg_match('/(\w+)(?:\s*)(z|m|zm)$/i', $value['type'], $matches);
 
         if (3 === count($matches)) {
+            if (array_key_exists('dimension', $value) && $matches[2] !== $value['dimension']) {
+                throw new RuntimeException('Specified dimension "' . strtoupper($value['dimension']) . '" does not match type "' . $value['type'] . '"');
+            }
+
             $value['type']      = $matches[1];
             $value['dimension'] = $matches[2];
         }
