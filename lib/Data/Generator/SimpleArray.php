@@ -51,7 +51,7 @@ class SimpleArray implements GeneratorInterface
         }
 
         $data = [
-            'type'  => array_key_exists('type', $value) ? $value['type'] : $typeHint,
+            'type'  => Object::getProperTypeName(array_key_exists('type', $value) ? $value['type'] : $typeHint),
             'value' => array_key_exists('value', $value) ? $value['value'] : $value,
             'srid'  => array_key_exists('srid', $value) ? $value['srid'] : null
         ];
