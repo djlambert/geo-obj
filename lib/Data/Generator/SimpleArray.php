@@ -41,7 +41,9 @@ class SimpleArray implements GeneratorInterface
      * @param null|string $typeHint
      *
      * @return array
+     * @throws RuntimeException
      * @throws UnsupportedFormatException
+     * @throws UnknownTypeException
      */
     public function generate($value, $typeHint = null)
     {
@@ -79,6 +81,7 @@ class SimpleArray implements GeneratorInterface
      * @param array $value
      *
      * @return array
+     * @throws RuntimeException
      */
     private function getDimensionFromType(array $value)
     {
