@@ -215,6 +215,44 @@ class SimpleArrayTest extends \PHPUnit_Framework_TestCase
                     'properties' => []
                 ]
             ],
+            'nullDimensionOnNoPoint'      => [
+                'value'    => [
+                    'value' => ['POINT(0 0)'],
+                    'type'  => 'POINT'
+                ],
+                'expected' => [
+                    'type'       => 'Point',
+                    'value'      => ['POINT(0 0)'],
+                    'srid'       => null,
+                    'dimension'  => null,
+                    'properties' => []
+                ]
+            ],
+            'noValueKeyValue'      => [
+                'value'    => [
+                    'type'  => 'POINT'
+                ],
+                'expected' => [
+                    'type'       => 'Point',
+                    'value'      => ['type' => 'POINT'],
+                    'srid'       => null,
+                    'dimension'  => null,
+                    'properties' => []
+                ]
+            ],
+            'notObjectValue'      => [
+                'value'    => [
+                    'type'  => 'POINT',
+                    'value' => ['type' => 'POINT']
+                ],
+                'expected' => [
+                    'type'       => 'Point',
+                    'value'      => ['type' => 'POINT'],
+                    'srid'       => null,
+                    'dimension'  => null,
+                    'properties' => []
+                ]
+            ],
             'nested'      => [
                 'value'    => [
                     'type'  => 'geometrycollection',
