@@ -88,7 +88,7 @@ class SimpleArray implements GeneratorInterface
             return $this->getDimensionFromValue($value['value']);
         }
 
-        if (is_array($value[0])) {
+        if ($this->isObjectArray($value)) {
             return $this->getDimensionFromValue($value[0]);
         }
 
