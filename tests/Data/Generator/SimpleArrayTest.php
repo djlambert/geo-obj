@@ -61,6 +61,12 @@ class SimpleArrayTest extends \PHPUnit_Framework_TestCase
      * @covers       \CrEOF\Geo\Obj\Data\Generator\SimpleArray::generate
      * @covers       \CrEOF\Geo\Obj\Data\Generator\SimpleArray::getDimension
      * @covers       \CrEOF\Geo\Obj\Data\Generator\SimpleArray::getDimensionFromType
+     * @covers       \CrEOF\Geo\Obj\Data\Generator\SimpleArray::getDimensionFromValue
+     * @covers       \CrEOF\Geo\Obj\Data\Generator\SimpleArray::isObject
+     * @covers       \CrEOF\Geo\Obj\Data\Generator\SimpleArray::isSequential
+     * @covers       \CrEOF\Geo\Obj\Data\Generator\SimpleArray::isObjectArray
+     * @covers       \CrEOF\Geo\Obj\Data\Generator\SimpleArray::isPoint
+     * @covers       \CrEOF\Geo\Obj\Data\Generator\SimpleArray::isNumber
      * @dataProvider goodSimpleArrayData
      */
     public function testGoodSimpleArray($value, array $expected)
