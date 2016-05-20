@@ -23,7 +23,10 @@
 
 namespace CrEOF\Geo\Obj\Data\Generator;
 
+use CrEOF\Geo\Obj\Exception\RuntimeException;
+use CrEOF\Geo\Obj\Exception\UnknownTypeException;
 use CrEOF\Geo\Obj\Exception\UnsupportedFormatException;
+use CrEOF\Geo\Obj\Object;
 
 /**
  * Class SimpleArray
