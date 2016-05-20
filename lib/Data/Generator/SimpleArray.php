@@ -127,13 +127,29 @@ class SimpleArray implements GeneratorInterface
     }
 
     /**
-     * @param array $value
+     * @param mixed $value
      *
      * @return bool
      */
-    private function isObject(array $value)
+    private function isObject($value)
     {
-        return array_key_exists('type', $value) && array_key_exists('value', $value) && is_array($value['value'] && $this->isSequential($value));
+        if (! is_array($value)) {
+            return false;
+        }
+
+        if (! array_key_exists('type', $value)) {
+            return false;
+        }
+
+        if (! array_key_exists('value', $value)) {
+            return false;
+        }
+
+        if (! $this->isSequential($value['value'])) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
