@@ -92,6 +92,10 @@ class SimpleArray implements GeneratorInterface
             return $this->getDimensionFromValue($value[0]);
         }
 
+        if (! $this->isPoint($value)) {
+            return is_array($value[0]) ? $this->getDimensionFromValue($value[0]) : null;
+        }
+
         switch (count($value)) {
             case 3:
                 return 'Z';
