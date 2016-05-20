@@ -46,7 +46,7 @@ class SimpleArray implements GeneratorInterface
             throw new UnsupportedFormatException();
         }
 
-        if (! array_key_exists('dimension', $value) && array_key_exists('type', $value)) {
+        if ($this->isObject($value)) {
             $value = $this->getDimensionFromType($value);
         }
 
