@@ -145,4 +145,42 @@ class SimpleArray implements GeneratorInterface
     {
         return array_keys($array) === range(0, count($array) - 1);
     }
+
+    /**
+     * @param array $value
+     *
+     * @return bool
+     */
+    private function isObjectArray(array $value)
+    {
+        if (! $this->isSequential($value)) {
+            return false;
+        }
+
+        return count($value) === count(array_filter($value, [$this, 'isObject']));
+    }
+
+    /**
+     * @param array $value
+     *
+     * @return bool
+     */
+    private function isPoint(array $value)
+    {
+        if (! $this->isSequential($value)) {
+            return false;
+        }
+
+        return count($value) === count(array_filter($value, [$this, 'isNumber']));
+    }
+
+    /**
+     * @param mixed $value
+     *
+     * @return bool
+     */
+    private function isNumber($value)
+    {
+        return is_int($value) || is_float($value);
+    }
 }
