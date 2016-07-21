@@ -3,3 +3,4 @@
 - Formatters
 - GeoJson generator
 - Consistent letter case handling for type names and dimension
+- Polygons need 4 points?
