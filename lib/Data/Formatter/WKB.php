@@ -60,8 +60,8 @@ class WKB implements FormatterInterface
     const WKB_FLAG_M                  = 0x40000000;
     const WKB_FLAG_Z                  = 0x80000000;
 
-    const WKB_MISMATCH_DROP           = 0;
-    const WKB_MISMATCH_FAIL           = 1;
+    const WKB_ENCODING_OGC            = 0x0001;
+    const WKB_ENCODING_POSTGIS        = 0x0002;
 
     /**
      * @var int
@@ -71,12 +71,7 @@ class WKB implements FormatterInterface
     /**
      * @var int
      */
-    private $flags;
-
-    /**
-     * @var int
-     */
-    private $mismatchAction;
+    private $encoding;
 
     /**
      * @var string
@@ -97,28 +92,22 @@ class WKB implements FormatterInterface
      * WKB constructor
      *
      * @param int $byteOrder
-     * @param int $flags
-     * @param int $mismatchAction
+     * @param int $encoding
      *
      * @throws UnexpectedValueException
      */
-    public function __construct($byteOrder = self::WKB_XDR, $flags = self::WKB_FLAG_NONE, $mismatchAction = self::WKB_MISMATCH_DROP)
+    public function __construct($byteOrder = self::WKB_XDR, $encoding = self::WKB_ENCODING_OGC)
     {
         if (self::WKB_XDR !== $byteOrder && self::WKB_NDR !== $byteOrder) {
             throw new UnexpectedValueException();
         }
 
-        if (0 !== (~ (self::WKB_FLAG_SRID | self::WKB_FLAG_M | self::WKB_FLAG_Z) & $flags)) {
+        if (self::WKB_ENCODING_OGC !== $encoding && self::WKB_ENCODING_POSTGIS !== $encoding) {
             throw new UnexpectedValueException();
         }
 
-        if (self::WKB_MISMATCH_DROP !== $mismatchAction && self::WKB_MISMATCH_FAIL !== $mismatchAction) {
-            throw new UnexpectedValueException();
-        }
-
-        $this->byteOrder      = $byteOrder;
-        $this->flags          = $flags;
-        $this->mismatchAction = $mismatchAction;
+        $this->byteOrder = $byteOrder;
+        $this->encoding  = $encoding;
     }
 
     /**
@@ -131,10 +120,9 @@ class WKB implements FormatterInterface
         $this->data  = $data;
         $this->value = null;
         $typeName    = $this->data['type'];
-        $flags       = $this->getFlags();
 
         $this->byteOrder();
-        $this->$typeName($this->data['value'], $flags);
+        $this->$typeName($this->data['value']);
 
         return $this->value;
     }
@@ -146,21 +134,19 @@ class WKB implements FormatterInterface
 
     /**
      * @param array $point
-     * @param int   $flags
      */
-    private function point(array $point, $flags)
+    private function point(array $point)
     {
-        $this->appendType(self::WKB_TYPE_POINT | $flags);
+        $this->appendType(self::WKB_TYPE_POINT);
         $this->appendFloats($point);
     }
 
     /**
      * @param array $points
-     * @param int   $flags
      */
-    private function lineString(array $points, $flags)
+    private function lineString(array $points)
     {
-        $this->appendType(self::WKB_TYPE_LINESTRING | $flags);
+        $this->appendType(self::WKB_TYPE_LINESTRING);
         $this->appendCount($points);
 
         foreach ($points as $point) {
@@ -170,11 +156,10 @@ class WKB implements FormatterInterface
 
     /**
      * @param array $rings
-     * @param int   $flags
      */
-    private function polygon(array $rings, $flags)
+    private function polygon(array $rings)
     {
-        $this->appendType(self::WKB_TYPE_POLYGON | $flags);
+        $this->appendType(self::WKB_TYPE_POLYGON);
         $this->appendCount($rings);
 
         foreach ($rings as $ring) {
@@ -188,46 +173,43 @@ class WKB implements FormatterInterface
 
     /**
      * @param array $points
-     * @param int   $flags
      */
-    private function multiPoint(array $points, $flags)
+    private function multiPoint(array $points)
     {
-        $this->appendType(self::WKB_TYPE_MULTIPOINT | $flags);
+        $this->appendType(self::WKB_TYPE_MULTIPOINT);
         $this->appendCount($points);
 
         foreach ($points as $point) {
             $this->byteOrder();
-            $this->point($point, $flags);
+            $this->point($point);
         }
     }
 
     /**
      * @param array $lineStrings
-     * @param int   $flags
      */
-    private function multiLineString(array $lineStrings, $flags)
+    private function multiLineString(array $lineStrings)
     {
-        $this->appendType(self::WKB_TYPE_MULTILINESTRING | $flags);
+        $this->appendType(self::WKB_TYPE_MULTILINESTRING);
         $this->appendCount($lineStrings);
 
         foreach ($lineStrings as $lineString) {
             $this->byteOrder();
-            $this->lineString($lineString, $flags);
+            $this->lineString($lineString);
         }
     }
 
     /**
      * @param array $polygons
-     * @param int   $flags
      */
-    private function multiPolygon(array $polygons, $flags)
+    private function multiPolygon(array $polygons)
     {
-        $this->appendType(self::WKB_TYPE_MULTIPOLYGON | $flags);
+        $this->appendType(self::WKB_TYPE_MULTIPOLYGON);
         $this->appendCount($polygons);
 
         foreach ($polygons as $polygon) {
             $this->byteOrder();
-            $this->polygon($polygon, $flags);
+            $this->polygon($polygon);
         }
     }
 
@@ -246,7 +228,7 @@ class WKB implements FormatterInterface
             $flags |= self::WKB_FLAG_SRID;
         }
 
-        if (($flags & $this->flags) !== $flags) {
+        if (($flags & $this->encoding) !== $flags) {
             throw new UnexpectedValueException(); //TODO mismatchAction?
         }
 
@@ -268,24 +250,12 @@ class WKB implements FormatterInterface
     }
 
     /**
-     * @return bool
-     */
-    private function getMachineByteOrder()
-    {
-        if (null !== self::$machineByteOrder) {
-            return self::$machineByteOrder;
-        }
-
-        self::$machineByteOrder = unpack('S', "\x01\x00")[1] === 1 ? self::WKB_NDR : self::WKB_XDR;
-
-        return self::$machineByteOrder;
-    }
-
-    /**
      * @param int $type
      */
     private function appendType($type)
     {
+        //TODO apply flags to type before appending
+
         $this->appendLong($type);
 
         if (($type & self::WKB_FLAG_SRID) === self::WKB_FLAG_SRID) {
@@ -315,6 +285,20 @@ class WKB implements FormatterInterface
         foreach ($floats as $float) {
             $this->appendFloat($float);
         }
+    }
+
+    /**
+     * @return bool
+     */
+    private function getMachineByteOrder()
+    {
+        if (null !== self::$machineByteOrder) {
+            return self::$machineByteOrder;
+        }
+
+        self::$machineByteOrder = unpack('S', "\x01\x00")[1] === 1 ? self::WKB_NDR : self::WKB_XDR;
+
+        return self::$machineByteOrder;
     }
 
     /**
