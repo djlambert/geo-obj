@@ -134,7 +134,7 @@ class WKBTest extends \PHPUnit_Framework_TestCase
                     'srid'      => null,
                     'dimension' => 'Z'
                 ],
-                'arguments' => [WKB::WKB_XDR, WKB::WKB_FLAG_Z],
+                'arguments' => [WKB::WKB_XDR, WKB::WKB_ENCODING_POSTGIS],
                 'expected'  => '0080000001000000000000000000000000000000000000000000000000'
             ],
             'testPointZXDRWithSRID' => [
@@ -144,7 +144,7 @@ class WKBTest extends \PHPUnit_Framework_TestCase
                     'srid'      => 4326,
                     'dimension' => 'Z'
                 ],
-                'arguments' => [WKB::WKB_XDR, WKB::WKB_FLAG_Z | WKB::WKB_FLAG_SRID],
+                'arguments' => [WKB::WKB_XDR, WKB::WKB_ENCODING_POSTGIS],
                 'expected'  => '00A0000001000010E63FF000000000000040000000000000004008000000000000'
             ],
             'testLineStringDefaultConstructor' => [
@@ -233,7 +233,7 @@ class WKBTest extends \PHPUnit_Framework_TestCase
                     'srid'      => 4326,
                     'dimension' => 'Z'
                 ],
-                'arguments' => [WKB::WKB_XDR, WKB::WKB_FLAG_SRID],
+                'arguments' => [WKB::WKB_XDR, WKB::WKB_ENCODING_POSTGIS],
                 'expected'  => [
                     'exception' => 'CrEOF\Geo\Obj\Exception\UnexpectedValueException',
                     'message'   => ''
@@ -246,7 +246,7 @@ class WKBTest extends \PHPUnit_Framework_TestCase
                     'srid'      => 4326,
                     'dimension' => 'Z'
                 ],
-                'arguments' => [WKB::WKB_XDR, WKB::WKB_FLAG_Z],
+                'arguments' => [WKB::WKB_XDR, WKB::WKB_ENCODING_POSTGIS],
                 'expected'  => [
                     'exception' => 'CrEOF\Geo\Obj\Exception\UnexpectedValueException',
                     'message'   => ''
