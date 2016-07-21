@@ -32,6 +32,7 @@ use CrEOF\Geo\Obj\Data\DataFactory;
  * @license http://dlambert.mit-license.org MIT
  *
  * @covers \CrEOF\Geo\Obj\Data\DataFactory
+ * TODO remove covers
  */
 class DataFactoryTest extends \PHPUnit_Framework_TestCase
 {
